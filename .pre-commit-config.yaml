@@ -1,0 +1,38 @@
+# $schema: https://json.schemastore.org/pre-commit-config.json
+
+# See https://pre-commit.com/hooks.html
+# See https://pre-commit.com/#adding-pre-commit-plugins-to-your-project
+minimum_pre_commit_version: '3.0.0'
+
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: no-commit-to-branch
+        args: [ --branch, staging ]
+      - id: destroyed-symlinks
+      - id: trailing-whitespace
+        args: [ --markdown-linebreak-ext=md ] # preserve markdown hard linebreaks
+        # Exclude .idea/*.xml files from the end-of-file-fixer because CLion keeps removing the final EOL in some.
+      - id: end-of-file-fixer
+        exclude: ^([^/]+/)?\.idea/.+\.xml$
+        # It's important that the mixed-line-ending check comes FTER end-of-file-fixer because the latter can only
+        # append LF - even on files supposed to use CRLF - so we have to rely on mixed-line-ending to fix it.
+      - id: mixed-line-ending
+        args: [ '--fix=auto' ] # fix to the most occuring EOL
+      - id: check-merge-conflict
+      - id: check-case-conflict
+        # Exclude unicode data from check-added-large-files because these text files may be as large as 2MB
+      - id: check-added-large-files
+        args: [ '--maxkb=500' ] # if git-lfs is installed, lfs files will be skipped (requires git-lfs>=2.2.1 )
+      - id: fix-byte-order-marker
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+#  - repo: https://github.com/jorisroovers/gitlint
+#    rev: v0.19.1
+#    hooks:
+#      - id: gitlint
+#

@@ -1,0 +1,79 @@
+Checks:
+  -*,
+  altera-struct-pack-align,
+  bugprone-*,
+  cert-dcl58-cpp,
+  cert-err34-c,
+  cert-err52-cpp,
+  cert-err60-cpp,
+  cert-flp30-c,
+  cert-mem57-cpp,
+  cert-msc50-cpp,
+  cert-msc51-cpp,
+  cert-oop57-cpp,
+  cert-oop58-cpp,
+  clang-analyzer-*,
+  cppcoreguidelines-interfaces-global-init,
+  cppcoreguidelines-narrowing-conversions,
+  cppcoreguidelines-no-malloc,
+  cppcoreguidelines-pro-type-member-init,
+  cppcoreguidelines-pro-type-cstyle-cast,
+  cppcoreguidelines-pro-type-static-cast-downcast,
+  cppcoreguidelines-slicing,
+  google-default-arguments,
+  google-explicit-constructor,
+  google-runtime-operator,
+  hicpp-deprecated-headers,
+  hicpp-exception-baseclass,
+  hicpp-multiway-paths-covered,
+  llvm-*,
+  -llvm-header-guard,
+  -llvm-include-order,
+  -llvmlibc-*,
+  -llvm-namespace-comment,
+  misc-const-correctness,
+  misc-definitions-in-headers,
+  misc-misleading-bidirectional,
+  misc-misleading-identifier,
+  misc-misplaced-const,
+  misc-new-delete-overloads,
+  misc-no-recursion,
+  misc-non-copyable-objects,
+  misc-redundant-expression,
+  misc-static-assert,
+  misc-throw-by-value-catch-by-reference,
+  misc-unconventional-assign-operator,
+  misc-uniqueptr-reset-release,
+  misc-unused-parameters,
+  modernize-*,
+  -modernize-avoid-c-arrays,
+  -modernize-macro-to-enum,
+  -modernize-use-default-member-init,
+  -modernize-use-trailing-return-type,
+  mpi-buffer-deref,
+  mpi-type-mismatch,
+  openmp-use-default-none,
+  performance-*,
+  portability-*,
+  readability-*,
+  -*-function-cognitive-complexity,
+  -*-identifier-length,
+  -*-redundant-preprocessor,
+FormatStyle: file
+CheckOptions:
+  # All Standard C Headers and project library headers ending *.h are allowed but only a subset of C++ headers.
+  # You can use `// NOLINT(portability-restrict-system-includes)` to force include headers not in this list but this
+  # should happen **only** when wrapping functionality provided by the CRT and never in a public header.
+  portability-restrict-system-includes.Includes: -*, *.h, *.hpp,
+    cassert, cctype, cerrno, cinttypes, cfloat, climits, clocale, cmath, csignal, cstdarg, cstddef, cstdint, cstdio,
+    cstdlib, cstring, ctime, initializer_list, new
+  readability-implicit-bool-conversion.AllowIntegerConditions: true
+# Treat all warnings as errors except for pragma messages and the warning directive itself. Anything else is considered
+# an error including unknown compiler parameters.
+# Use `// NOLINT` in code to silence unintended warnings.
+WarningsAsErrors: '*,-*-#pragma-messages,-*-#warnings'
+
+# NOTE: HeaderFilterRegex is parsed using llvm::Regex which does not support negative lookahead so there is no use in
+#       trying to define an expression here. Instead, we rely on CMake to pass the `--header-filter` command line
+#       argument which will have the correct <PROJECT_SOURCE_DIR> prefix.
+#       See https://stackoverflow.com/a/71923685

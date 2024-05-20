@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Copyrighted" pattern="(file:*.lua||file:*.rc||file:*.c||file:*.cc||file:*.cpp||file:*.cxx||file:*.h||file:*.hpp||file:*.hxx||file:*.py)&amp;&amp;!file:.*//*&amp;&amp;!file:submodules/*//*&amp;&amp;!file:packages//*" />
+</component>

@@ -1,0 +1,198 @@
+#
+# This file contains rules that control how Git handles binary and text files, including line endings. Note that
+# 'filter' uses native Git mechanics and is indeed case insensitive on Windows/NTFS. However, your repository would run
+# into trouble on a case sensitive filesystem (e.g. Linux) should you fail treat your files as case sensitive.
+#
+
+# Omit the .git folder on export
+.git* export-ignore
+
+# Set the text attribute to "auto" for all files to ensure that text files any contributor might introduce to the
+# repository have line endings normalized (to LF). Also set default line ending for the work tree as LF. Windows is way
+# more tolerant with LF than other systems are with CRLF and most modern editors can deal with either line endings
+# anyway so we can default to LF here and create exceptions below for specific Windows files such as *.cmd and *.bat
+# which are still sensitive to line-endings. This setting should be consistent with the end_of_line property for [*] in
+# the .editorconfig file.
+* text=auto             eol=lf
+
+# Avoid warnings about .gitmodule line-endings by setting it explicitly
+.gitmodules             eol=lf
+
+# Unix Shell script lines must end with LF or the script will not run.
+# Windows Batch script lines must end with CRLF to avoid a bug where the parser can only find labels within 512-byte
+# block boundaries. This is important when files are downloaded through a zip archive created on a Linux machine (as is
+# the case with GitHub archive downloads) See https://stackoverflow.com/a/232674.
+
+## Windows specific files
+*.bat               text eol=crlf
+*.bat.in            text eol=crlf
+*.cmd               text eol=crlf
+*.cmd.in            text eol=crlf
+*.ps1               text eol=crlf
+*.vcxproj           text eol=crlf
+*.vcxproj.filters   text eol=crlf
+*.sln               text eol=crlf
+*.wixproj           text eol=crlf
+*.wxi               text eol=crlf
+*.wxs               text eol=crlf
+
+# Leave .idea xml files alone by default as JetBrains IDEs insist on using the platform EOL when writting to those files.
+.idea/**/*.xml                                      !eol
+.idea/inspectionProfiles/Project_Default.xml        eol=lf
+
+###
+# Source Code
+#
+*.[sS][hH]                                          diff=bash
+*.[cC][sS]                                          diff=csharp
+*.[cC]                                              diff=cpp
+*.[cC][cC]                                          diff=cpp
+*.[cC][xX][xX]                                      diff=cpp
+*.[cC][pP][pP]                                      diff=cpp
+*.[cC]++                                            diff=cpp
+*.[hH][pP][pP]                                      diff=cpp
+*.[hH]                                              diff=cpp
+*.[hH]++                                            diff=cpp
+*.[hH][hH]                                          diff=cpp
+*.[rR][cC]                                          diff=cpp
+*.[oO][bB][jJ][cC]                                  diff=objc
+*.[jJ][aA][vV][aA]                                  diff=java
+*.[lL][uU][aA]                                      diff=patience
+*.[pP][yY]                                          diff=python
+*.[hH][tT][mM][lL]                                  diff=html
+*.[hH][tT][mM]                                      diff=html
+*.[xX][hH][tT][mM][lL]                              diff=html
+*.[xX][hH][tT][mM]                                  diff=html
+*.[xX][mM][lL]                                      diff=patience
+*.[cC][sS][sS]                                      diff=css
+# Json diff requires an external tool. Make sure to run `git config --global diff.json.textconv python -m json.tool`
+*.[jJ][sS]                                          diff=json
+*.[jJ][sS][oO][nN]                                  diff=json
+
+###
+#  Precompiled C/C++ Headers
+#
+*.[gG][cC][hH]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[pP][cC][hH]                      filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+#  Precompiled Lua
+*.[lL][jJ][bB][cC]                  filter=lfs      diff=lfs            merge=lfs   -text
+*.[bB][cC]                          filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# Graphics
+#
+*.[bB][mM][pP]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[eE][xX][rR]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[gG][iI][fF]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[hH][dD][rR]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[iI][fF][fF]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[jJ][pP][eE][gG]                  filter=lfs      diff=lfs            merge=lfs   -text
+*.[jJ][pP][gG]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[pP][iI][cC][tT]                  filter=lfs      diff=lfs            merge=lfs   -text
+*.[pP][nN][gG]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[pP][sS][dD]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[tT][gG][aA]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[tT][iI][fF]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[tT][iI][fF][fF]                  filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# Fonts
+#
+*.[tT][tT][fF]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[oO][tT][fF]                      filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# Audio
+#
+*.[aA][iI][fF]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[aA][iI][fF][fF]                  filter=lfs      diff=lfs            merge=lfs   -text
+*.[iI][tT]                          filter=lfs      diff=lfs            merge=lfs   -text
+*.[mM][oO][dD]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[mM][pP]3                         filter=lfs      diff=lfs            merge=lfs   -text
+*.[oO][gG][gG]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[sS]3[mM]                         filter=lfs      diff=lfs            merge=lfs   -text
+*.[wW][aA][vV]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[xX][mM]                          filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# Video
+#
+*.[mM][pP]4                         filter=lfs      diff=lfs            merge=lfs   -text
+*.[mM][pP][gG]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[mM][pP][eE][gG]                  filter=lfs      diff=lfs            merge=lfs   -text
+*.[mM][oO][vV]                      filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# 3D Object
+#
+*.3[dD][mM]                         filter=lfs      diff=lfs            merge=lfs   -text
+*.3[dD][sS]                         filter=lfs      diff=lfs            merge=lfs   -text
+*.[bB][lL][eE][nN][dD]              filter=lfs      diff=lfs            merge=lfs   -text
+*.[bB][lL][eE][nN][dD]              filter=lfs      diff=lfs            merge=lfs   -text
+*.[cC]4[dD]                         filter=lfs      diff=lfs            merge=lfs   -text
+*.[cC][oO][lL][lL][aA][dD][aA]      filter=lfs      diff=lfs            merge=lfs   -text
+*.[dD][aA][eE]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[dD][xX][fF]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[FF][BB][XX]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[fF][bB][xX]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[jJ][aA][sS]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[lL][wW][sS]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[lL][xX][oO]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[mM][aA]                          filter=lfs      diff=lfs            merge=lfs   -text
+*.[mM][aA][xX]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[mM][bB]                          filter=lfs      diff=lfs            merge=lfs   -text
+*.[oO][bB][jJ]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[pP][lL][yY]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[sS][kK][pP]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[sS][tT][lL]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[zZ][tT][lL]                      filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# Archives
+#
+*.7[zZ]                             filter=lfs      diff=lfs            merge=lfs   -text
+*.[zZ][iI][pP]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[gG][zZ]                          filter=lfs      diff=lfs            merge=lfs   -text
+*.[tT][gG][z]                       filter=lfs      diff=lfs            merge=lfs   -text
+*.[bB][zZ]2                         filter=lfs      diff=lfs            merge=lfs   -text
+*.[pP][yY][zZ]                      filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# Documents
+#
+*.[mM][dD]                                          diff=markdown
+*.[dD][oO][cC]                      filter=lfs      diff=astextplain    merge=lfs   -text
+*.[dD][oO][cC][xX]                  filter=lfs      diff=astextplain    merge=lfs   -text
+*.[dD][oO][tT]                      filter=lfs      diff=astextplain    merge=lfs   -text
+*.[pP][dD][fF]                      filter=lfs      diff=astextplain    merge=lfs   -text
+*.[rR][tT][fF]                      filter=lfs      diff=astextplain    merge=lfs   -text
+*.[pP][sS]                          filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# Misc Binaries
+#
+*.[eE][xX][eE]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[dD][lL][lL]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[sS][oO]                          filter=lfs      diff=lfs            merge=lfs   -text
+*.[dD][yY][lL][iI][bB]              filter=lfs      diff=lfs            merge=lfs   -text
+*.[lL][iI][bB]                      filter=lfs      diff=lfs            merge=lfs   -text
+*.[aA]                              filter=lfs      diff=lfs            merge=lfs   -text
+
+###
+# Github Linguist Settings (https://github.com/github/linguist)
+#
+.idea/**                            linguist-vendored
+CMakeLists.txt                      linguist-vendored
+*.in                                linguist-vendored
+*.cmake                             linguist-vendored
+*.py                                linguist-vendored
+*.sh                                linguist-vendored
+*.bat                               linguist-vendored
+*.cmd                               linguist-vendored
+[Dd]oc/**                           linguist-documentation
+[Dd]ocument/**                      linguist-documentation
+[Dd]ocuments/**                     linguist-documentation
+[Dd]ocumentation/**                 linguist-documentation
+[Rr]resources/**                    linguist-documentation

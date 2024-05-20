@@ -1,0 +1,33 @@
+# See https://docs.zephyrproject.org/latest/develop/modules.html#module-yaml-file-description
+name: "windmill"
+
+# Relative paths are based on the location of west.yml
+build:
+  # Path to the Kconfig file that will be sourced into Zephyr Kconfig tree
+  kconfig: zephyr/Kconfig
+  # Path to the folder that contains the CMakeLists.txt file to be added by the Zephyr build system.
+  cmake: zephyr
+  settings:
+    # Zephyr will use `<board_root>/boards` for additional boards.
+    board_root: zephyr
+    # Zephyr will use `<dts_root>/dts` for additional dts files and `<dts_root>/dts/bindings` for additional dts
+    # binding files.
+    dts_root: zephyr
+    # Zephyr will use `<snippet_root>/snippets` for additional snippets. These snippets must be defined in snippet.yml
+    # files underneath the <snippet_root>/snippets folder.
+    snippet_root: zephyr
+    # Zephyr will use `<soc_root>/soc` for additional SoCs.
+    soc_root: zephyr
+    # Zephyr will use `<arch_root>/arch` for additional architectures.
+    arch_root: zephyr
+    # Zephyr will use `<module_ext_root>/modules` for external modules. Any folder containing a CMakeLists.txt or
+    # Kconfig will be automatically included and the folder name used for the module name. For example:
+    #   <module_ext_root>
+    #         |__modules
+    #               |__modules.cmake
+    #               |__<module_name>
+    #                       |__CMakeLists.txt
+    #                       |__Kconfig
+    module_ext_root: zephyr
+    # Zephyr will use `<sca_root>/cmake/sca` for additional SCA (static code analysis) tool implementations.
+    sca_root: zephyr

@@ -1,0 +1,37 @@
+{
+  "version": 4,
+  "include": [
+    "CMakePresetsCommon.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "custom_plank",
+      "hidden": true,
+      "inherits": "zephyr",
+      "cacheVariables": {
+        "BOARD": "custom_plank"
+      }
+    },
+    {
+      "name": "custom_plank/hello_world",
+      "inherits": "custom_plank",
+      "cacheVariables": {
+        "FIRMWARE": ".external/zephyr/samples/hello_world"
+      }
+    },
+    {
+      "name": "custom_plank/example_empty",
+      "inherits": "custom_plank",
+      "cacheVariables": {
+        "FIRMWARE": "firmware/zephyr/apps/example_empty"
+      }
+    },
+    {
+      "name": "custom_plank/example_blink",
+      "inherits": "custom_plank",
+      "cacheVariables": {
+        "FIRMWARE": "firmware/zephyr/apps/example_blink"
+      }
+    }
+  ]
+}

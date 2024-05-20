@@ -1,0 +1,206 @@
+BasedOnStyle: LLVM
+AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: Right
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveBitFields: AcrossComments
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossComments: false
+  AcrossEmptyLines: false
+  AlignCompound: false
+  PadOperators: true
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+AlignTrailingComments: true
+AlignOperands: Align
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLambdasOnASingleLine: None
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterReturnType: None
+AlwaysBreakTemplateDeclarations: MultiLine
+AttributeMacros:
+  - __aligned
+  - __deprecated
+  - __packed
+  - __printf_like
+  - __syscall
+  - __syscall_always_inline
+  - __subsystem
+BitFieldColonSpacing: After
+BreakAfterAttributes: Always
+BreakBeforeBraces: Linux
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeConceptDeclarations: Always
+BreakBeforeTernaryOperators: false
+BreakConstructorInitializers: BeforeColon
+BreakInheritanceList: BeforeColon
+BreakStringLiterals: true
+ColumnLimit: 100
+CommentPragmas: '^ IWYU pragma:'
+CompactNamespaces: false
+ConstructorInitializerIndentWidth: 8
+ContinuationIndentWidth: 8
+Cpp11BracedListStyle: false
+FixNamespaceComments: false
+ForEachMacros:
+  - 'FOR_EACH'
+  - 'FOR_EACH_FIXED_ARG'
+  - 'FOR_EACH_IDX'
+  - 'FOR_EACH_IDX_FIXED_ARG'
+  - 'FOR_EACH_NONEMPTY_TERM'
+  - 'RB_FOR_EACH'
+  - 'RB_FOR_EACH_CONTAINER'
+  - 'SYS_DLIST_FOR_EACH_CONTAINER'
+  - 'SYS_DLIST_FOR_EACH_CONTAINER_SAFE'
+  - 'SYS_DLIST_FOR_EACH_NODE'
+  - 'SYS_DLIST_FOR_EACH_NODE_SAFE'
+  - 'SYS_SFLIST_FOR_EACH_CONTAINER'
+  - 'SYS_SFLIST_FOR_EACH_CONTAINER_SAFE'
+  - 'SYS_SFLIST_FOR_EACH_NODE'
+  - 'SYS_SFLIST_FOR_EACH_NODE_SAFE'
+  - 'SYS_SLIST_FOR_EACH_CONTAINER'
+  - 'SYS_SLIST_FOR_EACH_CONTAINER_SAFE'
+  - 'SYS_SLIST_FOR_EACH_NODE'
+  - 'SYS_SLIST_FOR_EACH_NODE_SAFE'
+  - '_WAIT_Q_FOR_EACH'
+  - 'Z_FOR_EACH'
+  - 'Z_FOR_EACH_ENGINE'
+  - 'Z_FOR_EACH_EXEC'
+  - 'Z_FOR_EACH_FIXED_ARG'
+  - 'Z_FOR_EACH_FIXED_ARG_EXEC'
+  - 'Z_FOR_EACH_IDX'
+  - 'Z_FOR_EACH_IDX_EXEC'
+  - 'Z_FOR_EACH_IDX_FIXED_ARG'
+  - 'Z_FOR_EACH_IDX_FIXED_ARG_EXEC'
+  - 'Z_GENLIST_FOR_EACH_CONTAINER'
+  - 'Z_GENLIST_FOR_EACH_CONTAINER_SAFE'
+  - 'Z_GENLIST_FOR_EACH_NODE'
+  - 'Z_GENLIST_FOR_EACH_NODE_SAFE'
+  - 'STRUCT_SECTION_FOREACH'
+  - 'TYPE_SECTION_FOREACH'
+  - 'K_SPINLOCK'
+IfMacros:
+  - 'CHECKIF'
+IncludeBlocks: Regroup
+# Special include file sort ordering rules.
+# Priority indicates the "group" (where groups are separated by a blank line).
+# SortPriority indicates the overall order when we need to override alphabetical order due to Windows header
+# dependencies.
+IncludeCategories:
+  - Regex: '^"nutmeg/config\.h"$'
+    Priority: 2
+    SortPriority: 20
+    CaseSensitive: true
+  - Regex: '^"nutmeg/.+/private/'
+    Priority: 2
+    SortPriority: 21
+    CaseSensitive: true
+  - Regex: '^"nutmeg/'
+    Priority: 1
+    CaseSensitive: true
+  - Regex: '^"(windows|unistd)\.h"$'
+    Priority: 3
+    SortPriority: 30
+  - Regex: '^"[[:alnum:]_]+'
+    Priority: 4
+    SortPriority: 41
+  - Regex: '^<(windows|unistd)\.h>$'
+    Priority: 5
+    SortPriority: 50
+  - Regex: '^<zephyr/'
+    Priority: 7
+    SortPriority: 70
+    CaseSensitive: true
+  - Regex: '^<[[:alnum:]_/]+\.h>$'
+    Priority: 6
+    SortPriority: 60
+  - Regex: '^<[[:alnum:]_]+'
+    Priority: 6
+    SortPriority: 61
+IndentCaseLabels: false
+IndentGotoLabels: true
+IndentPPDirectives: BeforeHash
+IndentRequiresClause: false
+IndentWidth: 4
+InsertBraces: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: All
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: true
+PackConstructorInitializers: CurrentLine
+ReflowComments: true
+RequiresClausePosition: OwnLine
+RequiresExpressionIndentation: OuterScope
+SeparateDefinitionBlocks: Always
+ShortNamespaceLines: 60
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceAroundPointerQualifiers: Default
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: Custom
+SpaceBeforeParensOptions:
+  AfterControlStatements: true
+  AfterFunctionDeclarationName: false
+  AfterFunctionDefinitionName: false
+  AfterRequiresInClause: true
+  AfterRequiresInExpression: true
+  AfterOverloadedOperator: false
+SpaceBeforeRangeBasedForLoopColon: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: Never
+SpaceInEmptyBlock: false
+SpacesInCStyleCastParentheses: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard: c++17
+StatementAttributeLikeMacros:
+  - NUTMEG_FLATTEN
+  - NUTMEG_INLINE
+  - NUTMEG_NOINLINE
+  - NUTMEG_PURE
+  - NUTMEG_DETERMINISTIC
+  - NUTMEG_KEEP
+  - NUTMEG_ALLOCATOR
+StatementMacros:
+  - __pragma
+  - _Pragma
+  - _ReadWriteBarrier
+  - NUTMEG_CLANG_DIAGNOSTIC_PUSH
+  - NUTMEG_CLANG_DIAGNOSTIC_IGNORE
+  - NUTMEG_CLANG_DIAGNOSTIC_POP
+  - NUTMEG_GCC_DIAGNOSTIC_PUSH
+  - NUTMEG_GCC_DIAGNOSTIC_IGNORE
+  - NUTMEG_GCC_DIAGNOSTIC_POP
+  - NUTMEG_IDE_DIAGNOSTIC_PUSH
+  - NUTMEG_IDE_DIAGNOSTIC_IGNORE
+  - NUTMEG_IDE_DIAGNOSTIC_POP
+TabWidth: 4
+TypenameMacros:
+  - NUTMEG_CONCAT
+UseTab: Never
+WhitespaceSensitiveMacros:
+  - __asm__
+  - __volatile__
+  - warning
+  - STRINGIFY
+  - Z_STRINGIFY
+  - NUTMEG_STR
+  - NUTMEG_XSTR
+  - NUTMEG_CLANG_DIAGNOSTIC_IGNORE
+  - NUTMEG_GCC_DIAGNOSTIC_IGNORE
+  - NUTMEG_IDE_DIAGNOSTIC_IGNORE

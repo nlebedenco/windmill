@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Kconfig" pattern="(file:*.conf||file:defconfig||file:Kconfig||file:Kconfig.*)&amp;&amp;!file:.*//*&amp;&amp;!file:submodules/*//*&amp;&amp;!file:packages//*" />
+</component>

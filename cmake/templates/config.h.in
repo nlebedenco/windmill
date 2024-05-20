@@ -1,0 +1,35 @@
+// IWYU pragma: private
+// IWYU pragma: friend "windmill/.*\.c(pp|xx)?"
+#pragma once
+
+/* Basic info */
+#define WINDMILL_NAME                 "@WINDMILL_NAME@"
+#define WINDMILL_VERSION              "@WINDMILL_VERSION@"
+#define WINDMILL_VERSION_MAJOR        @WINDMILL_VERSION_MAJOR@
+#define WINDMILL_VERSION_MINOR        @WINDMILL_VERSION_MINOR@
+#define WINDMILL_VERSION_PATCH        @WINDMILL_VERSION_PATCH@
+
+/* Target system and processor names */
+#define WINDMILL_SYSTEM_NAME          "@CMAKE_SYSTEM_NAME@"
+#define WINDMILL_SYSTEM_VERSION       "@CMAKE_SYSTEM_VERSION@"
+#define WINDMILL_SYSTEM_PROCESSOR     "@CMAKE_SYSTEM_PROCESSOR@"
+#define WINDMILL_SYSTEM_PLATFORM      "@WINDMILL_SYSTEM_PLATFORM@"
+
+#define WINDMILL_SYSTEM_TRIPLET       "@WINDMILL_SYSTEM_TRIPLET@"
+#define WINDMILL_SYSTEM_ABI           "@WINDMILL_SYSTEM_ABI@"
+#define WINDMILL_SYSTEM_ABI_VERSION   "@WINDMILL_SYSTEM_ABI_VERSION@"
+
+#cmakedefine WINDMILL_BUILD_TYPE "@WINDMILL_BUILD_TYPE@"
+#ifndef WINDMILL_BUILD_TYPE
+    #define WINDMILL_BUILD_TYPE "Unknown"
+#endif
+
+/* Build checks */
+#cmakedefine HAVE_SIGNAL_H 1
+#cmakedefine HAVE_STDNORETURN_H 1
+#cmakedefine HAVE_STDALIGN_H 1
+#cmakedefine HAVE_THREADS_H 1
+#cmakedefine HAVE_EXCEPTIONS 1
+#cmakedefine HAVE_RTTI 1
+#cmakedefine HAVE_IDENTICAL_EAGAIN_EWOULDBLOCK 1 /* Unix only */
+#cmakedefine HAVE_IDENTICAL_ENOTSUP_EOPNOTSUPP 1 /* Unix only */

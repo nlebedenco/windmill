@@ -1,0 +1,6 @@
+#!/bin/sh
+
+dp0=$(X= cd -- "$(dirname -- "$0")" && pwd -P)
+n0=$(basename -- "$0")
+
+python $dp0/extras/python/$n0.py "$@" || exit $?

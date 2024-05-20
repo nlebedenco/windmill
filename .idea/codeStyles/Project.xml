@@ -1,0 +1,20 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <option name="RIGHT_MARGIN" value="0" />
+    <option name="FORMATTER_ON_TAG" value="(clang-format|cmake-format\:) on" />
+    <option name="FORMATTER_OFF_TAG" value="(clang-format|cmake-format\:) off" />
+    <option name="FORMATTER_TAGS_ACCEPT_REGEXP" value="true" />
+    <option name="DO_NOT_FORMAT">
+      <list>
+        <fileSet type="globPattern" pattern="*.rc" />
+        <fileSet type="globPattern" pattern=".*/*" />
+        <fileSet type="globPattern" pattern=".*/**/*" />
+        <fileSet type="globPattern" pattern="submodules/*" />
+        <fileSet type="globPattern" pattern="submodules/**/*" />
+      </list>
+    </option>
+    <clangFormatSettings>
+      <option name="ENABLED" value="true" />
+    </clangFormatSettings>
+  </code_scheme>
+</component>

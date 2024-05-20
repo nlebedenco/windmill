@@ -1,0 +1,30 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+tab_width = 4
+max_line_length = 120
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[.gitmodules]
+indent_style = tab
+
+[*.{bat,bat.in,cmd,cmd.in,ps1,vcxproj,vcxproj.filters,sln,wixproj,wxi,wxs}]
+end_of_line = crlf
+
+[{*.apinotes,*.yaml,*.yml,.clang-format,.clang-tidy,.clangd}]
+indent_size = 2
+
+[*.json]
+indent_size = 2
+
+[*.md]
+max_line_length = 80
+
+[*.{c,cc,cxx,cpp,h,hxx,hpp}]
+indent_style = tab
+max_line_length = 100

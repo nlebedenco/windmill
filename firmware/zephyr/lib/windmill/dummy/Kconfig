@@ -1,0 +1,16 @@
+config WINDMILL_DUMMY
+    bool "Enable the windmill dummy library"
+    help
+      This option enables the 'windmill dummy' library
+
+config WINDMILL_DUMMY_GET_VALUE_DEFAULT
+    int "Default value returned by windmill_dummy_get_value()"
+    depends on WINDMILL_DUMMY
+    default 0
+    help
+      This option primarily exists as an example of a library Kconfig
+      setting.
+
+      This option specifies the value for windmill_dummy_get_value() to return
+      when the input parameter is zero. (Otherwise the function returns the
+      input parameter value.)

@@ -1,0 +1,32 @@
+# $schema: manifest-schema.yml
+# See https://docs.zephyrproject.org/latest/develop/west/manifest.html#west-manifests for more information.
+manifest:
+  remotes:
+    - name: upstream
+      url-base: git@github.com:windmill-forks
+
+  defaults:
+    remote: upstream
+
+  # DO NOT auto import modules. Each one must be declared in its own section to enforce correct use of forks.
+  projects:
+    - name: zephyr
+      revision: 34c84eccec0508b16f5001b20fa369f387d856df
+      groups:
+        - zephyr
+      import: false
+    - name: cmsis # required by the ARM port
+      revision: 4b96cbb174678dcd3ca86e11e1f24bc5f8726da0
+      path: modules/hal/cmsis
+      groups:
+        - hal
+    - name: hal_nordic # required by the custom_plank board (Nordic based)
+      revision: a3aacc7e43dec644a9ddfee4aa578a4f8ff54610
+      path: modules/hal/nordic
+      groups:
+        - hal
+    - name: hal_stm32 # required by ST nucleo boards (STM32 based)
+      revision: ed93098718d5c727d2fac5ef27023a2a14763e32
+      path: modules/hal/stm32
+      groups:
+        - hal

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rules>
+    <rule version="1">
+        <tokenlist>raw</tokenlist>
+        <pattern><![CDATA[if \( (\b\w+\b) \) { (?:g_)?free \( \b\1\b \) ; }]]></pattern>
+        <message>
+            <severity>style</severity>
+            <summary>Redundant condition. It is valid to free a NULL pointer.</summary>
+        </message>
+    </rule>
+    <rule version="1">
+        <tokenlist>raw</tokenlist>
+        <pattern><![CDATA[(\b\w+\b) \* (\b\w+\b) = 0 ;]]></pattern>
+        <message>
+            <id>modernizeUseNullPtr</id>
+            <severity>style</severity>
+            <summary>Prefer to use a 'nullptr' instead of initializing a pointer with 0.</summary>
+        </message>
+    </rule>
+</rules>

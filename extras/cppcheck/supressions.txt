@@ -1,0 +1,6 @@
+// Ignore staged sources from pre-compiled packages (mostly headers).
+*:*/.stage/*
+
+// Ignore external sources. This prefix is also referred in embedded/west.yml. If you change this, make sure to match
+// the same prefix used in the west manifest.
+*:*/.external/*

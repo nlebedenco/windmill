@@ -1,0 +1,12 @@
+[submodule "submodules/llvm-project"]
+	path = submodules/llvm-project
+	url = git@github.com:windmill-forks/llvm-project.git
+[submodule "submodules/iwyu"]
+	path = submodules/iwyu
+	url = git@github.com:windmill-forks/include-what-you-use.git
+[submodule "submodules/pcre"]
+	path = submodules/pcre
+	url = git@github.com:windmill-forks/pcre.git
+[submodule "submodules/cppcheck"]
+	path = submodules/cppcheck
+	url = git@github.com:windmill-forks/cppcheck.git

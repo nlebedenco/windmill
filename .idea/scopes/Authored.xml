@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Authored" pattern="(file:.clang-format||file:.clang-tidy||file:.editorconfig||file:*.md||file:*.json||file:*.yaml||file:*.yml||file:*.xml||file:*.txt||file:*.cmake||file:*.lua||file:*.rc||file:*.c||file:*.cc||file:*.cpp||file:*.cxx||file:*.h||file:*.hpp||file:*.hxx||file:*.py||file:*.in||file:*.conf||file:defconfig||file:Kconfig||file:Kconfig.*)&amp;&amp;!file:.*//*&amp;&amp;!file:submodules/*//*&amp;&amp;!file:packages//*" />
+</component>

@@ -1,0 +1,17 @@
+# $schema: zephyr/manifest-schema.yml
+# See https://docs.zephyrproject.org/latest/develop/west/manifest.html#west-manifests for more information.
+manifest:
+  version: "1.2"
+  self:
+    west-commands: scripts/west-commands.yml
+    import:
+      # This prefix is referred in:
+      #   - <PROJECT_ROOT>/.west/config
+      #   - <PROJECT_ROOT>/extras/cppcheck/supressions.txt
+      # If you change it here, make sure to update those files too.
+      path-prefix: .external
+      # Import all YAML files in the submanifests folder, as they appear on the file system, sorted by file name. Note
+      # that projects and modules are imported only once with the settings from the point where they are first referred
+      # to so submanifest files imported first can override project/module from manifest files imported later. It is
+      # thus recommended for all submanifest files to begin with a numeric prefix `XXX-` to enforce a clear order.
+      file: zephyr/submanifests

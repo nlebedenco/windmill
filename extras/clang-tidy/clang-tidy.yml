@@ -1,0 +1,26 @@
+# This is a configuration file for the extras/python/linter.py script.
+#
+# List of reglar expressions used to match arguments that must be excluded before invoking the executable.
+# Any match will cause the argument to be excluded and optionally exclude the next N values after it as well.
+# For example:
+#
+# ExcludeArguments:
+#  - Regex: '^(-imacros=.+)$'
+#  - Regex: '^(-imacros)$'
+#    Values: 1
+
+ExcludeArguments:
+  - Regex: '^(-f(no-)?reorder-functions)$'
+  - Regex: '^(-f(no-)?printf-return-value)$'
+  - Regex: '^(-f(no-)?defer-pop)$'
+  - Regex: '^(-mfp16-format=.+)$'
+  - Regex: '^(--specs=.+)$'
+  - Regex: '^(--param=.+)$'
+  - Regex: '^(-fanalyzer(-.+)?)$'
+  - Regex: '^(-W(no-)?analyzer-.+)$'
+  - Regex: '^(-fdump-analyzer(-.+)?)$'
+
+# List of reglar expressions used to match source files that must be ignored.
+# Any match will cause the program to ignore the input file and finish with exit code 0.
+IgnoreSources:
+  - '\.(build|stage)(/[^/]+)*/.+\.(c|cpp|cxx|cc)$'

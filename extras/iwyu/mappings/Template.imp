@@ -1,0 +1,62 @@
+###
+# Add definitions of the form { <directive>: <data> } separated by comma inside the map scope delimited by
+# square-brackets. Directives can be one of the literal strings: include, symbol, ref. Data varies between directives.
+#
+# ### Include mappings ###
+#
+# The `include` directive specifies a mapping between two include names (relative path, including quotes or angle
+# brackets). This is typically used to map from a private implementation detail header to a public facade header. Data
+# for this directive is a list of four strings containing:
+#
+#   * Header name to map from
+#   * Visibility of the include name to map from
+#   * Header name to map to
+#   * Visibility of the include name to map to
+#
+# Example: { include: [ "<bits/unique_ptr.h>", "private", "<memory>", "public" ] }
+#
+# Include mappings support a special wildcard syntax for the first entry:
+#
+#  { include: [ "@<internal/.*>", "private", "<public>", "public" ] }
+#
+# The `@` prefix is a signal that the remaining content is a regex, and can be used to re-map a whole subdirectory of
+# private headers to a public facade header.
+#
+# ### Symbol mappings ###
+#
+# The `symbol` directive maps from a qualified symbol name to its authoritative header. Data for this directive is a
+# list of four strings containing:
+#
+#   * Symbol name to map from
+#   * Visibility of the symbol
+#   * Header name to map to
+#   * Visibility of the include name to map to
+#
+# Example: { symbol: [ "NULL", "private", "<cstddef>", "public" ] }
+#
+# The symbol visibility is largely redundant -- it must always be `private`. It isn't entirely clear why symbol
+# visibility needs to be specified, and it might be removed moving forward. Unlike `include`, `symbol` directives do not
+# support the `@`-prefixed regex syntax in the first entry.
+#
+# ### Mapping refs ###
+#
+# The `ref` directive is used to pull in another mapping file, much like the C preprocessor's `#include` directive. Data
+# for this directive is a single string: the filename to include.
+#
+# Example: { ref: "more.symbols.imp" },
+#          { ref: "/usr/lib/other.includes.imp" }
+#
+# The rationale for the `ref` directive was to make it easier to compose project-specific mappings from a set of
+# library-oriented mapping files. For example, IWYU might ship with mapping files for [Boost](http://www.boost.org),
+# the SCL, various C standard libraries, the Windows API, the [Poco Library](http://pocoproject.org), etc. Depending on
+# what your specific project uses, you could easily create an aggregate mapping file with refs to the relevant mappings.
+#
+# The `ref` directives are first looked up relative to the current directory and if not found, relative to the referring
+# mapping file.
+#
+# See [IWYU Documentation](https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md)
+#
+###
+[
+
+]

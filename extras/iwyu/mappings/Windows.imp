@@ -1,0 +1,61 @@
+[
+  { include: [ "<xiosbase>", "private", "<ios_base>", "public" ] },
+  { include: [ "<xlocale>", "private", "<locale>", "public" ] },
+  { include: [ "<xstring>", "private", "<string>", "public" ] },
+  { include: [ "<xutility>", "private", "<utility>", "public" ] },
+  { include: [ "<corecrt_wstdio.h>", "private", "<cstdio>", "public" ] },
+
+  { include: [ "<winnls.h>", "private", "<stringapiset.h>", "private" ] },
+  { include: [ "<stringapiset.h>", "private", "<windows.h>", "public" ] },
+
+  { include: [ "<basetsd.h>", "private", "<windef.h>", "private" ] }, # or in winnt apparently
+  { include: [ "<handleapi.h>", "private", "<windef.h>", "private" ] },
+  { include: [ "<libloaderapi.h>", "private", "<windef.h>", "private" ] },
+  { include: [ "<minwindef.h>", "private", "<windef.h>", "private" ] },
+
+  { include: [ "<LMCons.h>", "private", "<winbase.h>", "private" ] },
+  { include: [ "<errhandlingapi.h>", "private", "<winbase.h>", "private" ] },
+  { include: [ "<excpt.h>", "private", "<winbase.h>", "private" ] },
+  { include: [ "<minwinbase.h>", "private", "<winbase.h>", "private" ] },
+  { include: [ "<namedpipeapi.h>", "private", "<winbase.h>", "private" ] },
+  { include: [ "<securitybaseapi.h>", "private", "<winbase.h>", "private" ] },
+
+  { include: [ "<datetimeapi.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<fileapi.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<verrsrc.h>", "private", "<windows.h>", "public" ] }, # VerRsrc.h
+  { include: [ "<winbase.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<windef.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<winerror.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<winnt.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<winuser.h>", "private", "<windows.h>", "public" ] },
+
+  { include: [ "<processenv.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<processthreadsapi.h>", "private", "<windows.h>", "public" ] },
+
+  { include: [ "<dbghelp.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<shellapi.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<shellapi.h>", "private", "<windows.h>", "public" ] }, # official name according to website
+  { include: [ "<shellapi.h>", "private", "<windows.h>", "public" ] },
+
+  { include: [ "<shlobj.h>", "private", "<windows.h>", "public" ] },
+  { include: [ "<objidl.h>", "private", "<windows.h>", "public" ] },
+
+  { include: [ "<minwindef.h>", private, "<windows.h>", public ] },
+  { include: [ "<windef.h>", private, "<windows.h>", public ] },
+  { include: [ "<winuser.h>", private, "<windows.h>", public ] },
+  { include: [ "<vcruntime_string.h>", private, "<cstring>", public ] },
+  { include: [ "<vcruntime_new.h>", private, "<new>", public ] },
+  { include: [ "<vcruntime.h>", private, "<cstddef>", public ] },
+  { include: [ "<xstring>", private, "<string>", public ] },
+  { include: [ "<minwinbase.h>", private, "<synchapi.h>", public ] },
+
+  { include: [ "<basetyps.h>", "private", "<objbase.h>", "private" ] },
+  { include: [ "<combaseapi.h>", "private", "<objbase.h>", "private" ] },
+  { include: [ "<objbase.h>", "private", "<windows.h>", "public" ] },
+
+  { include: [ "<wtypesbase.h>", "private", "<wtypes.h>", "private" ] },
+  { include: [ "<wtypes.h>", "private", "<windows.h>", "public" ] },
+
+  { include: [ "<guiddef.h>", "private", "<rpc.h>", "private" ] },
+  { include: [ "<rpc.h>", "private", "<windows.h>", "public" ] },
+]

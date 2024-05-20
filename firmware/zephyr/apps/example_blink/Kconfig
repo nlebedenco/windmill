@@ -1,0 +1,26 @@
+# This file is the Kconfig entry point of the firwmare. All application Kconfig options can be defined here or included
+# via other application Kconfig files. You can browse these options using the west targets menuconfig (terminal) or
+# guiconfig (GUI).
+mainmenu "Firmware Configuration"
+
+# Application configuration options go here
+menu "Application"
+
+endmenu
+
+# Sources Kconfig.zephyr from the Zephyr root directory.
+#
+# NOTE: All 'source' statements work relative to the Zephyr root directory (due to the $srctree environment variable
+# being set to $ZEPHYR_BASE). If you want to 'source' relative to the current Kconfig file instead, use 'rsource' (or a
+# path relative to the Zephyr root).
+source "Kconfig.zephyr"
+
+# In order to use logging in a module, a unique name must be specified and the module must be registered in code using
+# the LOG_MODULE_REGISTER function macro. Additionally, a maximum compiled-in log level for the module can be specified
+# as the second parameter. The Kconfig template below defines helps to define this maximum log level using config
+# options. As a result CONFIG_APP_LOG_LEVEL will be generated. Default log level (CONFIG_LOG_DEFAULT_LEVEL) is used if
+# a custom log level is not specified.
+# See https://docs.zephyrproject.org/latest/services/logging/index.html#logging-in-a-module
+module = APP
+module-str = app
+source "subsys/logging/Kconfig.template.log_config"

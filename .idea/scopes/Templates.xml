@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Templates" pattern="file:*.in&amp;&amp;!file:.*//*&amp;&amp;!file:submodules/*//*&amp;&amp;!file:packages//*" />
+</component>

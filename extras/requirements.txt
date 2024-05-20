@@ -1,0 +1,16 @@
+# PyPI requirements that can be installed from the project root with `pip install -r extras/requirements.txt`
+# Make sure to use a virtual environment to avoid conflicts with the host system. See README.md for instructions.
+
+pre-commit >= 3.0.0
+cmakelang  >= 0.6.13
+gitlint >= 0.19.0
+PyYAML>=5.1
+
+# These are fallbacks for when the LLVM toolchain does not come with the tools. Zephyr also lists these as requirements
+# so even if we decided to build and stage pre-compiled packages for these we would still end up installing the pip
+# packages anyway.
+clang-format == 17.0.1
+clang-tidy == 17.0.1
+
+# West version must be greater or equal to the minimum required in firmware/west.yml
+west >= 1.2
