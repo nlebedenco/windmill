@@ -22,33 +22,29 @@ be adopted by new forks. For example, users can also define their own prefixes,
 should their forks be re-used by others as a template, as opposed to being a
 final top-level CMake project in itself.
 
-## Third-Party Software
-
-Any third-party source code used either in full or in part is described in
-[OTHERS](OTHERS.md).
-
 ## Version
 
 Current version is set in [VERSION](VERSION) according to
 [semantic versioning 2.0.0](http://semver.org) but limited to
 `<MAJOR>.<MINOR>.<PATCH>[-<PRE>]` where [PRE] is the pre-release version
-component and must be numeric only. This implies [-PRE] only makes sense when
+component which must be numeric only. This implies [-PRE] only makes sense when
 [PATCH] is zero.
 
-This file is consumed by [shared.cmake](cmake/shared.cmake) which in turn relays
-the same information to all build targets through an auto-genertared config
-header. Check [config header template](cmake/templates/config.h.in) for more
+This file is consumed by [shared.cmake](cmake/shared.cmake) which in turn
+propagates
+the information to all build targets through an auto-genertared config header.
+Check [config header template](cmake/templates/config.h.in) for more
 information.
 
 We do not simply rely on git tags because:
 
-1. git tags can be easily deleted or changed by mistake, in particular by
+1. Git tags can be easily deleted or changed by mistake, in particular by
    inexperienced developers;
 
-2. git tags are discarded when the repository is archived or project files are
+2. Git tags are discarded when the repository is archived or project files are
    copied without the `.git` folder.
 
-3. git tags may have all sorts of arbitrary formats
+3. Git tags may have all sorts of arbitrary formats
 
 4. It is relatively easy to deisgn a git-hook that automatically tags the
    repository with the contents of the VERSION file whenever it gets modified.
@@ -57,6 +53,14 @@ We do not simply rely on git tags because:
    tag would be allowed to move should two branches end up having VERSION files
    with the same value or if only a specific branch (e.g. main) should receive
    version tags and what to with the tag when the branch's HEAD moves.
+
+It does not mean users should avoid git tags. Only that git tags should not be
+used as the source of truth for project version.
+
+## Third-Party Software
+
+Any third-party source code used either in full or in part is described in
+[OTHERS](OTHERS.md).
 
 ## Prior knowledge
 
@@ -124,7 +128,7 @@ information.
 
 ### Consistent [semantic versioning](https://semver.org/)
 
-- Version components MUST BE monotonic increasing (no exceptions, ever!).
+- Version components MUST BE numeric and monotonic increasing (no exceptions!).
 
 - Major change = Public Breaking change: a user has to act to make the product
   work in a pre-existing setup. Comparing the public properties of the product
@@ -295,39 +299,160 @@ up git.
 
 ## How to approach semantic versioning
 
-TODO
+CMake predates semantic versioning and thus for historical reasons it supports
+version numbers defined as `<MAJOR>[.<MINOR>[.<PATCH>[.<TWEAK>]]]`. Note that
+if `<TWEAK>` is omitted, CMake's version format is reduced to
+[semantic versioning 1.0](https://semver.org/spec/v1.0.0.html).
+
+For practical purposes and to reduce potential points of failure, projects
+should refrain from using the `<TWEAK>` version component.
+
+Mind that version numbers with pre-release or build components must be sanitized
+before use in CMake scripts, or they will not behave as expected (e.g. will not
+be correctly compared).
+
+The recommended practice is to use the pre-release component inside the
+[VERSION](VERSION) file only while the branch is in a development stage. Once it
+is considered stable, a release branch should be created where the pre-release
+component is removed from the project version and from that point on, any update
+increases the patch version.
 
 ## How to approach external dependencies
 
-TODO
+Remember the golden rule: **There ain't no such thing as a free lunch.**
+
+It is a common mistake to take project dependencies for granted. In particular,
+third-party open-source code bases. This is due to a misguided conviction that
+a dependency (commercial or not), and open-source software (OSS) in particular:
+
+1. Always delivers on its promises;
+2. Quality is always high;
+3. Provides the best solution for a problem;
+4. The whole OSS community is working for you for free;
+5. OSS code is more secure because a lot of people is constantly reviewing it
+   (the `many eyes` principle is a falacy)
+
+First consider that the majority of OSS is produced by individuals or small
+groups with varying levels of expertise, for very limited purposes and for small
+periods of time. Most are likely to be abandoned within a year of inception. Yet
+the economical aspect of taking advantage of free-work is so appealing that,
+according to some studies, more than 90% of commercial products rely on one or
+more abandoned (or outdated) OSS project.
+
+Then, for the small segment that is actively maintained a second aspect becomes
+key: control. What if the OSS project is deleted? What if its license changes?
+What if the author and/or community refuses to apply a security patch? What if
+its development direction changes and conflicts with your project direction?
+What if the author/community refuses to implement a feature or fix a bug you
+need for your project? What if it violates someone's copyright?
+
+It should be clear now that any external dependency is a weak spot and a
+potential liability. It represents a piece of the project that is not under our
+complete control, so we have to do work in way that mitigates potential risks.
 
 ### Always work with forks
 
-There are many reasons why forks should be the preferred way of referring or
-re-using third-party source code, but the most important aspect has to do with
-exercising control over the project code base and its dependencies.
+The main reason to use forks is to make sure that even if the author deletes
+the repository, or changes the license, or sell the IP (and I have seen these
+things happen more than once!) your project will continue to build.
 
-TODO: finish explanation
+Second, with your own fork you are the boss. You can create as many branches and
+tags as you like for your own purposes without having to ask for permission from
+the author. And more important, you can apply any code changes as you see fit
+and still take advantage of Git to track those changes.
+
+Of course, if you still want to be able to accept improvements from upstream
+(and who does not?) care should be taken to minimize conflicts.
 
 ### Never alter upstream branches in a fork
 
-TODO
+Branches inherited from upstream should be considered reserved for upstream
+updates only. Think of it as the fork's input stream. This approach has two main
+advantages:
+
+1. These branches remain easily comparable to upstream branches to identify
+   updates;
+
+2. These branches will never conflict with upstream changes, they will always
+   fast-forward;
 
 ### Never alter upstream tags in a fork
 
-TODO
+Tags inherited from upstream should be considered reserved for upstream updates
+only. This is due to the fact that tags carry meaning and tags from upstream
+are expected to always point to commit hashes fetched from upstream.
 
 ### Use fork branches for modifications
 
-TODO
+Since we cannot modify branches originated in upstream, we have to create our
+own fork branches if we want to introduce changes. This is particularly
+convenient because:
+
+1. Changes will be tracked with contextual information (date, author,
+   description and diff);
+
+2. Eventual conflicts are limited, can be resolved in the fork branch and will
+   not affect our ability to continue receiving updates from upstream;
+
+3. Fork branches can be arbitrarily organized;
+
+4. Fork branches do not need to include the whole set of commits from any
+   upstream branch (we may cherry-pick changes);
+
+Naturally, it is important to adhere to a naming convention to avoid the risk of
+name-clashes with upstream branches existing or to be created. The recommended
+practice is to prefix all fork branches with the name of the project or
+initiative that depends on it followed by the name of the upstream branch it
+tracks. For example, if the upstream branch is called `release/2.0` and our
+project is called `foobar` the fork branch name would be `foobar/release/2.0`.
+
+The same idea can be applied to tags.
 
 ### Minimize modifications in your fork branches
 
-TODO
+Because we have total control of our forks, we may be tempted into trying to
+"fix" everything we can find in our fork branches, any minor violation, even
+reformat the source code according to our standards. This is mistake. Remember
+that every modification pushes our fork branch away from the upstream branch it
+tracks and increases the likelyhood of conflicts when we try to merge in new
+updates. Yes, fork branches are meant to be customized but changes should be
+minimal. Many times it is better to live with that unformatted source code or
+suboptimal function implementation if those files are likely to be modified in
+the upstream as well. Leave conflict resolution for what is worth it.
+
+Besides, always consider contributing to upstream first. Changing a fork branch
+should be considered the last resort. If the change is required immeditely,
+consider using a temporary fork branch where you have your patch now and a
+cleaner one you can switch to once the patch is accepted upstream.
 
 ### Beware of third-party dependencies
 
-TODO
+It is easy to forget that dependencies of a dependency are yours too. This
+extends to tools and in special to git submodules.
+
+If you fork a dependency you have to recursively fork all its submodules.
+Otherwise, you fall into the trap of uncontrolled dependencies all the same.
+Of course, you will have to correctly update the URLs and references of the
+submodules in your fork branches to point to your forks. This is not difficult
+but a long chain of sub-depedencies can easily grow into a lot of extra
+maintenance work so be mindful of your dependencies. Always prefer
+self-contained dependencies, that is those that do not bring more.
+
+Be extra careful with projects that download content on demand as it can be
+buried in one or more build scripts. Some CMake projects
+use [ExternalProject_FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html)
+for that which will require patching. Zephyr uses West manifests, but we can use
+a [submanifests folder](firmware/zephyr/submanifests) to override any Zephyr
+module property.
+
+Finally, beware of shared dependencies as they tend to complicate updates.
+For example, say your project depends on A@v1.0 and B@v2.0 both which depend on
+C@v1.0. Then one day you decide to update B to v3.0 but since it now depends on
+C@v2.0 you have to update C as well only to realize this breaks A. So you have
+to update A as well. At this point, if A does have an update available that
+supports C@v2.0 consider yourself lucky! Chances are it does not, and you got
+yourself locked with B@v2.0 and C@v1.0 until you can find a replacement for A.
+This problem is extremely common with ubiquituous depedencies such as OpenSSL.
 
 ## Coding Guidelines
 
@@ -380,7 +505,127 @@ same base folder.
 
 ### Windows
 
-TODO
+1. Update Windows:
+    1. Select `Start->Settings->Update & Security->Windows Update`
+    2. Click *Check for updates and install any that are available*
+
+2. Install Visual Studio 2022
+
+3. Install [Chocolatey](https://chocolatey.org/install)
+
+4. Open a cmd.exe terminal as **Administrator**. To do so, press the
+   Windows key, type `cmd`, right-click on *Command Prompt* in the search
+   results, and choose *Run as Administrator*.
+
+5. Disable global confirmation to avoid having to confirm the installation of
+   individual programs:
+   ```
+   $ choco feature enable -n allowGlobalConfirmation
+   ```
+
+6. Install required tools
+   ```
+   $ choco install cmake ninja python
+   ```
+   You may want to skip installing a tool if you already have it installed as
+   part of another software package. For example, CLion comes bundled with a
+   fairly recent versions of CMake and Ninja. Only ensure that the executables
+   can be found in the system path.
+
+7. Download and unpack the Zephyr SDK under `C:\Portable\Zephyr`
+
+8. Configure environment variables:
+    1. Select `Settings->About->Advanced System Settings->Environment Variables`
+    2. Under *System variables* add these:
+       ```
+       CMAKE_GENERATOR=Ninja Multi-Config
+       ZEPHYR_SDK_INSTALL_DIR=C:\Portable\Zephyr"
+       ```
+
+### WSL (Ubuntu 24.04)
+
+This is only meant to build Linux native apps. Zephyr applications cannot be
+built on WSL2. Use the Windows host system instead.
+
+1. Open a WSL2 terminal
+
+2. Update the system
+   ```
+   $ sudo apt update
+   $ sudo apt upgrade
+   ```
+
+3. Edit (or create) the file `/etc/wsl.conf` and add the section:
+   ```
+   [interop]
+   appendWindowsPath=false
+   ```
+   This is necessary because by default, WSL2 appends the Windows PATH
+   environment variable into its own to allow to users to execute Windows
+   programs from within WSL (yikes!). This may cause problems with tools that
+   search the system such as npm and cmake as discussed
+   [here](https://mauridb.medium.com/wsl2-windows-python-and-node-resolving-some-conflicts-8a329fddc3a5).
+
+4. Install development depedencies:
+   ```
+   $ sudo apt install \
+     build-essential gdb gperf ninja-build \
+     clang clang-tidy clang-format lldb lld llvm \
+     python-is-python3 python3-pip python3-setuptools python3-venv \
+     pkg-config perl doxygen graphviz valgrind cmake
+
+   ```
+
+5. Edit `/etc/profile` and append the following lines:
+   ```
+   export CMAKE_GENERATOR="Ninja Multi-Config"
+   export ZEPHYR_SDK_INSTALL_DIR=/opt/zephyr"
+   ```
+
+6. Remove git if installed
+   ```
+   $ sudo apt remove git
+   $ sudo apt autoremove
+   ```
+
+7. Remove any .gitconfig from your WSL $HOME dir
+    ```
+    $ rm ~/.gitconfig
+    ```
+
+8. Create a symlink to the Windows Git executable (actual location of
+   git.exe may vary)
+    ```
+    $ sudo mkdir -p /usr/local/bin
+    $ sudo ln -s "/mnt/c/Program Files/Git/bin/git.exe" /usr/local/bin/git
+    ```
+   Optionally you might want to ensure any configured tool in your
+   `.gitconfig` is accesible in WSL2 too. For example, if your gitconfig
+   uses notepad++ for the editor and Araxis for diff/merge you could do:
+    ```
+    $ sudo ln -s "/mnt/c/ProgramData/chocolatey/bin/notepad++.exe" /usr/local/bin/notepad++
+    $ sudo ln -s "/mnt/c/Program Files/Araxis/Araxis Merge/compare.exe" /usr/local/bin/compare
+    ```
+   It is not enough to create the symlinks in `~/.local/bin` because CLion
+   runs WSL profiles with `wsl --exec /bin/bash -c` in which case the `PATH`
+   variable will not include `$HOME/.local/bin`
+
+9. Restart the terminal session
+
+10. Check version of glibc
+    ```
+    $ ldd --version
+    ```
+
+11. Check which libstdc++ is installed
+    ```
+    $ /sbin/ldconfig -p | grep stdc++
+    ```
+
+12. List all compatible versions of libstdc++ (version 3.4.0 and above)
+    ```
+    $ strings /lib/x86_64-linux-gnu/libstdc++.so.6 | grep LIBCXX
+    ```
 
 ### Linux
 
@@ -397,10 +642,112 @@ TODO: Document build types
 TODO: Document that CMAKE_C_FLAGS and CMAKE_CXX_FLAGS are ignored in Zephyr
 builds
 
+1. Open a terminal window
+
+2. Clone the repository and change into the project root directory
+   ```
+   $ git clone --recurse-submodules git@github.com:nlebedenco/windmill
+   $ cd windmill
+   ```
+
+### Building using CMake
+
+1. List all configuration presets available for the host to build
+   ```
+   $ cmake --list-presets
+   ```
+
+2. Configure the project using a preset
+   ```
+   $ cmake --preset x86_64-pc-windows-msvc
+   ```
+   Presets are divided into desktop, mobile and zephyr. Desktop presets are
+   named after canonical triplets for *PC* and *Apple* platforms. Firmware
+   presets are named after the concatenation of board name and application name.
+
+   Note that sources under the [platforms](platforms) folder can only be built
+   for desktop or mobile systems and thus require a corresponding.
+
+   Conversely sources under `.extrenal/zephyr` and `firmware/zephyr` folders can
+   only be built for *zephyr* and thus require a firmware preset.
+
+   Desktop and mobile applications support both single and multi-config
+   generators. By default, they will use `Ninja Multi-Config`.
+
+   Firmware applications however only support `Ninja` and `Makefile` generators
+   in their single-config variants due to limitations of the Zephyr project
+   upstream so firmware presets will use `Ninja` by default.
+
+   Remember that when using CMake with a single-config generator (always the
+   case for firmware configurations) a custom build type, if desired, must be
+   passed in the command line using `-DCMAKE_BUILD_TYPE=` and cannot be changed
+   later by the build command.
+
+   For example:
+   ```
+   $ cmake --preset nucleo_u575zi_q-empty -DCMAKE_BUILD_TYPE=Release
+   ```
+   On the other hand, when using a multi-config (as available for desktop
+   applications only) CMake will ignore `CMAKE_BUILD_TYPE` and a custom build
+   type, if desired, can be specified later in the build command line using the
+   `--config` argument.
+
+   Supported build types are: Debug, Release, RelWithDebInfo, MinSizeRel.
+   If omitted, the default build type is Debug.
+
+   For more information
+   see [CMake command line documentation](https://cmake.org/cmake/help/v3.25/manual/cmake.1.html#generate-a-project-buildsystem).
+
+   You might also want to pass `-DCMAKE_EXECUTE_PROCESS_COMMAND_ECHO=STDOUT`
+   for verbose output of commands executed in the configuration phase and
+   `-DCMAKE_VERBOSE_MAKEFILE=ON` for verbose output of commands executed in the
+   build phase.
+
+3. Build the project
+   ```
+   $ cmake --build .build/preset/x86_64-pc-windows-msvc`
+   ```
+   For more information
+   see [CMake command line documentation](https://cmake.org/cmake/help/v3.25/manual/cmake.1.html#build-a-project).
+
+### Using West
+
+1. Configure a convenient default binary directory
+   ```
+   west config build.dir-fmt .build/west/{board}-{app}
+   ```
+
+2. Configure and build
+
+    1. Desktop or firmware project using a preset
+       ```
+       $ west build -b x86_64-pc-windows-msvc -- --preset x86_64-pc-windows-msvc
+       ```
+       Note that West invokes CMake using its own generator settings which
+       by default is Ninja (single-config). This cannot be changed using build
+       command line arguments but may be changed in the west config file or
+       using
+       the `west config` command. Any generator specified in the preset is
+       ignored as well as the `CMAKE_GENERATOR` environment variable.
+
+       Similarly, West explicitly sets a build directory based on its own
+       configuration. Any binary directory specified in the preset is also
+       ignored.
+
+    2. Firmware project without a preset
+       ```
+       $ west build -b nucleo_u575zi_q firmware/zephyr/apps/empty
+       ```
+
+    3. Zephyr sample without a preset
+       ```
+       $ west build -b nucleo_u575zi_q .external/zephyr/samples/hello_world
+       ```
+
 ## How to customize CMake presets
 
 TODO: Describe the use of presets and how fork presets can be included in
-CMakePresets.json. Unwanted nutmeg presets can be hidden using a
+CMakePresets.json. Unwanted windmill presets can be hidden using a
 CMakeUserPresets.json or removed altogether in forks.
 
 ## Adding new Zephyr modules
@@ -408,10 +755,10 @@ CMakeUserPresets.json or removed altogether in forks.
 TODO: Document addition of new remote modules in a fork using submanifests
 and how to properly have your own forks overriding zephyr modules
 (must disable auto import of modules using `import: false` in each
-zephyr project listed in the manifest) - Example in 100-nutmeg.yml
+zephyr project listed in the manifest) - Example in 100-windmill.yml
 
 TODO: Document addition of new local modules in a fork under the
-embedded/zephyr/modules folder
+firmware/zephyr/modules folder
 
 ## Supported IDEs
 

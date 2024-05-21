@@ -95,15 +95,15 @@ IncludeBlocks: Regroup
 # SortPriority indicates the overall order when we need to override alphabetical order due to Windows header
 # dependencies.
 IncludeCategories:
-  - Regex: '^"nutmeg/config\.h"$'
+  - Regex: '^"windmill/config\.h"$'
     Priority: 2
     SortPriority: 20
     CaseSensitive: true
-  - Regex: '^"nutmeg/.+/private/'
+  - Regex: '^"windmill/.+/src/'
     Priority: 2
     SortPriority: 21
     CaseSensitive: true
-  - Regex: '^"nutmeg/'
+  - Regex: '^"windmill/'
     Priority: 1
     CaseSensitive: true
   - Regex: '^"(windows|unistd)\.h"$'
@@ -169,29 +169,29 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard: c++17
 StatementAttributeLikeMacros:
-  - NUTMEG_FLATTEN
-  - NUTMEG_INLINE
-  - NUTMEG_NOINLINE
-  - NUTMEG_PURE
-  - NUTMEG_DETERMINISTIC
-  - NUTMEG_KEEP
-  - NUTMEG_ALLOCATOR
+  - WINDMILL_FLATTEN
+  - WINDMILL_INLINE
+  - WINDMILL_NOINLINE
+  - WINDMILL_PURE
+  - WINDMILL_DETERMINISTIC
+  - WINDMILL_KEEP
+  - WINDMILL_ALLOCATOR
 StatementMacros:
   - __pragma
   - _Pragma
   - _ReadWriteBarrier
-  - NUTMEG_CLANG_DIAGNOSTIC_PUSH
-  - NUTMEG_CLANG_DIAGNOSTIC_IGNORE
-  - NUTMEG_CLANG_DIAGNOSTIC_POP
-  - NUTMEG_GCC_DIAGNOSTIC_PUSH
-  - NUTMEG_GCC_DIAGNOSTIC_IGNORE
-  - NUTMEG_GCC_DIAGNOSTIC_POP
-  - NUTMEG_IDE_DIAGNOSTIC_PUSH
-  - NUTMEG_IDE_DIAGNOSTIC_IGNORE
-  - NUTMEG_IDE_DIAGNOSTIC_POP
+  - WINDMILL_CLANG_DIAGNOSTIC_PUSH
+  - WINDMILL_CLANG_DIAGNOSTIC_IGNORE
+  - WINDMILL_CLANG_DIAGNOSTIC_POP
+  - WINDMILL_GCC_DIAGNOSTIC_PUSH
+  - WINDMILL_GCC_DIAGNOSTIC_IGNORE
+  - WINDMILL_GCC_DIAGNOSTIC_POP
+  - WINDMILL_IDE_DIAGNOSTIC_PUSH
+  - WINDMILL_IDE_DIAGNOSTIC_IGNORE
+  - WINDMILL_IDE_DIAGNOSTIC_POP
 TabWidth: 4
 TypenameMacros:
-  - NUTMEG_CONCAT
+  - WINDMILL_CONCAT
 UseTab: Never
 WhitespaceSensitiveMacros:
   - __asm__
@@ -199,8 +199,8 @@ WhitespaceSensitiveMacros:
   - warning
   - STRINGIFY
   - Z_STRINGIFY
-  - NUTMEG_STR
-  - NUTMEG_XSTR
-  - NUTMEG_CLANG_DIAGNOSTIC_IGNORE
-  - NUTMEG_GCC_DIAGNOSTIC_IGNORE
-  - NUTMEG_IDE_DIAGNOSTIC_IGNORE
+  - WINDMILL_STR
+  - WINDMILL_XSTR
+  - WINDMILL_CLANG_DIAGNOSTIC_IGNORE
+  - WINDMILL_GCC_DIAGNOSTIC_IGNORE
+  - WINDMILL_IDE_DIAGNOSTIC_IGNORE

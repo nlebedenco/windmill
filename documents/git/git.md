@@ -46,7 +46,7 @@ servers restrictions regarding large file transfers and timeouts.
 
 ### HTTP, aka `http://<server>/`
 
-- Doesn't work with some services anymore like Github, but is offered by some
+- Doesn't work with some services anymore like GitHub, but is offered by some
   other Git hosts.
 
 - Works practically everywhere, like HTTPS.
@@ -92,48 +92,49 @@ installer for that.
 
 Start by installing Git.
 
-- Path
+- Select path
+
   ![Git Screen 1](01.jpg)
 
-- Options
+- Select options
+
   ![Git Screen 2](02.jpg)
 
-    - Additional icons and windows explorer integration are left out because we
-      are
-      going to use Tortoise for that.
+    - Additional icons and Windows Explorer integration are left out because we
+      are going to use Tortoise for that.
 
     - Adding a Git Bash profile to Windows Terminal is optional but not very
-      useful
-      unless you are an experienced developer and plans to use shell scripts on
-      Windows (not recommended for beginners).
+      useful unless you are an experienced developer and plans to use shell
+      scripts on Windows (not recommended for beginners).
 
     - Adding the new `Scalar` tool at the bottom of the list is optional (not
-      showing
-      in the screenshot).
+      showing in the screenshot).
 
 - Default editor
+
   ![Git Screen 3](03.jpg)
 
     - Select default editor. Notepad is recommended as it is simple, fast and
-      more
-      user friendly than Vim. Notepad++ is another good alternative but has been
-      known to have broken git integration in the past.
+      more user-friendly than Vim. Notepad++ is another good alternative but has
+      been known to have broken git integration in the past.
       See https://stackoverflow.com/q/63529351
 
 - Default main branch name
+
   ![Git Screen 4](04.jpg)
 
     - Select the default branch name. Any name will do really. One can always
       change the default branch later. Let git decide is the recommended
-      approach
-      because it offers better compatibility and less friction unless your are
-      particularly sensitive to the word "master" in which case therapy is also
-      recommended.
+      approach because it offers better compatibility and less friction unless
+      you are particularly sensitive to the word "master" in which case therapy
+      is also recommended.
 
 - Adjusting your PATH environment
+
   ![Git Screen 5](05.jpg)
 
 - Choosing SSH executable
+
   ![Git Screen 6](06.jpg)
 
     - Bundled OpenSSH is the recommended option because it is the more flexible
@@ -141,12 +142,15 @@ Start by installing Git.
       Tortoise installation steps.
 
 - Which SSL/TLS library to use for HTTPS
+
   ![Git Screen 7](07.jpg)
 
 - Default EOL conversion
+
   ![Git Screen 8](08.jpg)
 
 - Terminal emulator to use with git-bash
+
   ![Git Screen 9](09.jpg)
 
     - Windows console is recommended to avoid surprising behaviour when commands
@@ -155,17 +159,21 @@ Start by installing Git.
       printed correctly).
 
 - Default `git pull`  behaviour
+
   ![Git Screen 10](10.jpg)
 
     - Fetch and merge is the most user-friendly option for beginners.
 
 - Use Git credential
+
   ![Git Screen 11](11.jpg)
 
 - Enable file system caching and disable symlinks
+
   ![Git Screen 12](12.jpg)
 
 - Experimental features
+
   ![Git Screen 13](13.jpg)
 
 Once the installation is complete, open a console window and check git and
@@ -182,66 +190,65 @@ git-lfs versions. For example:
 Now install and configure TortoiseGit as follows:
 
 - Tortoise Options
+
   ![Tortoise Screen 1](tortoise/01.jpg)
 
 - Complete the installtion and run the "First use Wizard"
 
 - Authentication and credential store
+
   ![Tortoise Screen 2](tortoise/02.jpg)
 
-    - Click in "Generate PuTTY key pair"
+- Click "Generate PuTTY key pair"
 
-    - PuTTY Key Generator will open as shown below:
-      ![Tortoise Screen 3](tortoise/03.jpg)
+- PuTTY Key Generator will open as shown below:
 
-    - Click in "Generate"
+  ![Tortoise Screen 3](tortoise/03.jpg)
 
-        - If you skipped the first use wizard, this step can be repeated by
-          executing the key generator directly from
-          `C:\Program Files\TortoiseGit\bin\puttygen.exe`
+- Click "Generate"
+
+    - If you skipped the first use wizard, this step can be repeated by
+      executing the key generator directly from
+      `C:\Program Files\TortoiseGit\bin\puttygen.exe`
 
     - Move the mouse cursor erratically over the window to generate random input
       for the key until the progress bar is filled.
 
-    - Save the keys
-      ![Tortoise Screen 4](tortoise/04.jpg)
+- Save the keys
 
-        1. The key comment is optional and can hold whatever value. Write
-           something
-           you can use to identify your key later.
+  ![Tortoise Screen 4](tortoise/04.jpg)
 
-        2. You are encouraged to define a passphrase to secure your keys but you
-           may
-           choose not to do so for example when already using an encrypted
-           volume to
-           store the keys.
+    1. The key comment is optional and can hold whatever value. Write
+       something you can use to identify your key later.
 
-        3. Click on "Save Public Key"
+    2. You are encouraged to define a passphrase to secure your keys, but you
+       may choose not to do so for example when already using an encrypted
+       volume to store the keys.
 
-        4. Save your public key in a secure location. Use the extension *.pub
-           If you decided not to use a passphrase, you can ignore the warning
-           about
-           it.
+    3. Click on "Save Public Key"
 
-        5. Click on "Save Private Key"
+    4. Save your public key in a secure location. Use the extension *.pub
+       If you decided not to use a passphrase, you can ignore the warning
+       about it.
 
-        6. Save your public key in a secure location. Use the extension *.ppk
-           If you decided not to use a passphrase, you can ignore the warning
-           about
-           it.
+    5. Click on "Save Private Key"
 
-        7. In the main menu click `Conversions -> Export OpenSSH key`
-           Save your RSA pub key in a secure location. Use the extension *.rsa
+    6. Save your public key in a secure location. Use the extension *.ppk
+       If you decided not to use a passphrase, you can ignore the warning
+       about it.
 
-        8. Copy the contents of the text box "Public key for pasting into
-           OpenSSH
-           authorized_keys file". This is the same key saved in your *.pub
-           file .
+    7. In the main menu click `Conversions -> Export OpenSSH key`
+       Save your RSA pub key in a secure location. Use the extension *.rsa
 
-        9. Click "Finish"
+    8. Copy the contents of the text box "Public key for pasting into
+       OpenSSH authorized_keys file". This is the same key saved in your
+       *.pub file.
+
+    9. Click "Finish"
 
 - Make sure you have the `GIT_SSH` environment variable pointing to
   TortoiseGitPlink. For example:
+
   ![Tortoise Screen 5](tortoise/05.jpg)
 
 TortoiseGitPlink C:\Program Files\TortoiseGit\bin\TortoiseGitPlink.exe
@@ -257,9 +264,9 @@ Configure your public key in your git server:
 Create a Pageant Shortcut
 
 1. Despite TortoiseGit having a feature to load your key automatically upon
-   first execution we are going to setup a shotcut to manually execute Pageant
-   on Windows startup so we can seamlessly use TortoiseGit AND the git client on
-   the command prompt without having to worry about key loading.
+   first execution we are going to set up a shotcut to manually execute Pageant
+   on Windows startup, so we can seamlessly use TortoiseGit AND the git client
+   on the command prompt without having to worry about key loading.
 
 2. Right-click on the desktop. Select New -> Shortcut
 
@@ -321,4 +328,31 @@ TODO
 	algorithm = patience
 [diff "json"]
 	textconv = python -m json.tool
+```
+
+## Example system .gitconfig for Windows
+
+```
+[diff "astextplain"]
+	textconv = astextplain
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[http]
+	sslBackend = schannel
+[core]
+	autocrlf = true
+	fscache = true
+	symlinks = false
+	editor = notepad
+[pull]
+	rebase = false
+[credential]
+	helper = manager
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[init]
+	defaultBranch = master
 ```

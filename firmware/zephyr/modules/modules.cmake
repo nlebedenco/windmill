@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-# This file is configured in embedded/zephyr/module.yml as the entry point for external modules and it is included by
+# This file is configured in firmware/zephyr/module.yml as the entry point for external modules and it is included by
 # Zephyr early on in the build configuration.
 include_guard(DIRECTORY)
 message(STATUS "Including modules.cmake file ${CMAKE_CURRENT_LIST_FILE}")
