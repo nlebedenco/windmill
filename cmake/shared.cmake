@@ -46,6 +46,13 @@ set(WINDMILL_CONFIG_H_IN "${WINDMILL_TEMPLATES_DIR}/config.h.in")
 # CMake config header.
 set(WINDMILL_CONFIG_H "${WINDMILL_GENERATED_DIR}/windmill/config.h")
 
+# Command to copy DLLs with corresponding PDBs
+set(WINDMILL_COMMAND_DLLCOPY "${Python3_EXECUTABLE}" -u "${WINDMILL_SOURCE_DIR}/extras/python/dllcopy.py")
+
+# Command wrapper for source code linters (iwyu, clang-tidy, ...)
+set(WINDMILL_COMMAND_LINTER "${Python3_EXECUTABLE}" -u "${WINDMILL_SOURCE_DIR}/extras/python/linter.py")
+
+
 ########################################################################################################################
 # Options
 ########################################################################################################################

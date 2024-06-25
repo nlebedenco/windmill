@@ -2,8 +2,6 @@ include_guard(DIRECTORY)
 message(STATUS "Including ${CMAKE_CURRENT_LIST_FILE}")
 
 if (WINDMILL_ENABLE_IWYU)
-
-    set(WINDMILL_IWYU_WRAPPER "${WINDMILL_SOURCE_DIR}/extras/python/linter.py")
     set(WINDMILL_IWYU_WRAPPER_CONFIG_FILE "${WINDMILL_SOURCE_DIR}/extras/iwyu/iwyu.yml")
 
     set(WINDMILL_IWYU_MAPPING_FILE "${WINDMILL_SOURCE_DIR}/extras/iwyu/mappings/${CMAKE_SYSTEM_NAME}.imp")
@@ -40,7 +38,7 @@ if (WINDMILL_ENABLE_IWYU)
     #       See https://stackoverflow.com/a/77249518
     #       See https://gitlab.kitware.com/cmake/cmake/-/issues/19706
     #
-    set(command "${Python3_EXECUTABLE}" -u "${WINDMILL_IWYU_WRAPPER}")
+    set(command "${WINDMILL_COMMAND_LINTER}")
     if (EXISTS "${WINDMILL_IWYU_WRAPPER_CONFIG_FILE}")
         list(APPEND command "--config-file=${WINDMILL_IWYU_WRAPPER_CONFIG_FILE}")
     else ()

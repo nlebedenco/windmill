@@ -898,7 +898,7 @@ function(windmill_copy_runtime_dependencies_after_build target)
         # no way to convert TARGET_RUNTIME_DLLS to a list of PDBs using generator expressions and there is no pactical
         # way to ignore missing PDBs either.
         add_custom_command(TARGET "${target}" POST_BUILD
-                COMMAND "${WINDMILL_COMMAND}" dllcopy
+                COMMAND "${WINDMILL_COMMAND_DLLCOPY}"
                 "$<TARGET_FILE_DIR:${target}>"
                 "$<TARGET_RUNTIME_DLLS:${target}>"
                 COMMENT "Copying runtime dependencies to output directory"

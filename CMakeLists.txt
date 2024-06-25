@@ -98,29 +98,45 @@
 # as follows:
 #
 # <PROJECT_ROOT>
-#     |____ CMakeLists.txt:
+#     |____ CMakeLists.txt: Environment set up (python virtual environment, west workspace). Cannot enforce any build
+#     |                     rule since it is effectively bypassed when building a Zephyr application using West.
 #     |
 #     |____ cmake
-#     |       |____ shared.cmake:
+#     |       |___ toolchains
+#     |       |       |____ <CMAKE_SYTEM_NAME>
+#     |       |               |___ Rules
+#     |       |               |      |____ <CMAKE_<LANG>_COMPILER>.cmake: Basic compiler configuration
+#     |       |               |
+#     |       |               |___ <CMAKE_<LANG>_COMPILER>.cmake: Fundamental target system configuration and
+#     |       |                                                   compiler detection.
+#     |       |___ modules
+#     |       |       |____ Windmill
+#     |       |               |___ Generators.cmake: CMake generator configurations and checks
+#     |       |               |___ Compilers.cmake: Dynamic compiler configurations and checks
+#     |       |               |___ Systems.cmake: Dynamic system configurations and checks
+#     |       |
+#     |       |____ shared.cmake: Configuration shared between Zephyr and non-zephyr applications (acts like a virtual
+#     |                           top-level CMake lists). Build rules can be enforced here.
 #     |
 #     |____ firmware
 #     |       |____ zephyr
-#     |               |____ modules.cmake
+#     |               |____ modules.cmake: Configuration exclusive to Zephyr applications.
 #     |
 #     |____ platforms
-#             |____ CMakeLists.txt:
+#             |____ CMakeLists.txt: Configuration shared by non-Zephyr applications
 #             |
 #             |____ desktop
-#             |       |____ CMakeLists.txt:
+#             |       |____ CMakeLists.txt: Configuration for desktop applications only
 #             |
 #             |____ mobile
-#                     |____ CMakeLists.txt:
+#                     |____ CMakeLists.txt: Configuration for mobile applications only
 #
-# Standard support for static code analysis in both CMake and Zephyr is deficient in many ways:
+# Note that standard support for static code analysis in both CMake and Zephyr is deficient in many ways which is why
+# we implement custom find modules for clang-tidy, include-what-you-use (iwyu) and cppcheck. In particular:
 #
 #   - `Clang-Tidy` integration in CMake only fully works when the configured compiler is also Clang. It can tolerate
 #     some GNUC or CL (msvc) compiler options to some degree and might even seem to work for simple configurations
-#     but will break at the first optimization option that is unknown to clang;
+#     but will break at the first optimization option that is unknown to Clang;
 #
 #   - `GCC analyzer` can only be configured with compiler options that become part of the build and all issues are
 #     reported as special compiler warnings which makes it more complicated to exclude thrid-party sources from the
@@ -130,7 +146,7 @@
 #
 #   - `cpptest` is proprietary and requires a commercial license from Parasoft;
 #
-#   - `Cppcheck` is limited and prone to false positives
+#   - `Cppcheck` is mostly restricted to pattern matching and so is prone to false positives;
 #
 #   - `CodeChecker` is extremely cumbersome to configure, must run as a separate build target, always analyzes all
 #     sources known by the build system even those not used in the build; does not produce IDE friendly output
@@ -144,7 +160,7 @@
 #     See https://github.com/Ericsson/codechecker/issues/4032
 #     See https://codechecker.readthedocs.io/en/latest/supported_code_analyzers/
 #
-# On top of all that, Zephyr only supports one SCA tool per configuration.
+# On top of all that, by-design Zephyr only supports one SCA tool per configuration.
 #
 # Also note that although the Zephyr project claims to support a number of different toolchains only the Zephyr SDK is
 # actively verified and tested. In addition, the majority of Zephyr scripts assume the compiler is GCC or has a GCC

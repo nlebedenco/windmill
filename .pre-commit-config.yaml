@@ -31,6 +31,7 @@ repos:
       - id: check-yaml
       - id: check-toml
       - id: check-json
+# TODO: Configure gitlint rules to match Zephyr's and enable gitlint
 #  - repo: https://github.com/jorisroovers/gitlint
 #    rev: v0.19.1
 #    hooks:

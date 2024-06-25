@@ -7,7 +7,6 @@ message(STATUS "Including ${CMAKE_CURRENT_LIST_FILE}")
 set(WINDMILL_CLANG_TIDY_VERIFY_CONFIG_MINIMUM_VERSION 17.0 CACHE STRING "")
 
 if (WINDMILL_ENABLE_CLANG_TIDY)
-    set(WINDMILL_CLANG_TIDY_WRAPPER "${WINDMILL_SOURCE_DIR}/extras/python/linter.py")
     set(WINDMILL_CLANG_TIDY_WRAPPER_CONFIG_FILE "${WINDMILL_SOURCE_DIR}/extras/clang-tidy/clang-tidy.yml")
 
     # Analyzers should be marked as required because the user can explicitly disable it using command line options.
@@ -27,7 +26,7 @@ if (WINDMILL_ENABLE_CLANG_TIDY)
                 " (found version \"${ClangTidy_VERSION}\", but minimum required is \"${WINDMILL_CLANG_TIDY_VERIFY_CONFIG_MINIMUM_VERSION}\")")
     endif ()
 
-    set(command "${Python3_EXECUTABLE}" -u "${WINDMILL_CLANG_TIDY_WRAPPER}")
+    set(command "${WINDMILL_COMMAND_LINTER}")
     if (EXISTS "${WINDMILL_CLANG_TIDY_WRAPPER_CONFIG_FILE}")
         list(APPEND command "--config-file=${WINDMILL_CLANG_TIDY_WRAPPER_CONFIG_FILE}")
     else ()
