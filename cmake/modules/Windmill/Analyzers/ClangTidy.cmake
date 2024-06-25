@@ -23,7 +23,8 @@ if (WINDMILL_ENABLE_CLANG_TIDY)
         )
     else ()
         message(STATUS "Could NOT verify clang-tidy configuration file"
-                " (found version \"${ClangTidy_VERSION}\", but minimum required is \"${WINDMILL_CLANG_TIDY_VERIFY_CONFIG_MINIMUM_VERSION}\")")
+                " (found version \"${ClangTidy_VERSION}\", but minimum required is"
+                " \"${WINDMILL_CLANG_TIDY_VERIFY_CONFIG_MINIMUM_VERSION}\")")
     endif ()
 
     set(command "${WINDMILL_COMMAND_LINTER}")

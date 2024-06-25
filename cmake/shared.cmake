@@ -7,13 +7,21 @@ message(STATUS "Including shared.cmake file ${CMAKE_CURRENT_LIST_FILE}")
 include(CMakePrintHelpers)
 include(CMakeDependentOption)
 
+# At this point, a Python executable should have been detected either by our top-level CMakeLists.txt or Zephyr's CMake
+# modules. These are just sanity checks because we do not fully control Zephyr scripts. The peculiar line-break and
+# whitespace in the error message is to match the output of windmill_require_variables() which we cannot yet use at
+# this point of the script.
+if (NOT DEFINED Python3_EXECUTABLE)
+    message(FATAL_ERROR "Undefined variable(s):\n    Python3_EXECUTABLE")
+endif ()
+
+if (NOT EXISTS "${Python3_EXECUTABLE}")
+    message(FATAL_ERROR "Invalid Python3 executable (file not found: \"${Python3_EXECUTABLE}\")")
+endif ()
+
 ########################################################################################################################
 # Definitions
 ########################################################################################################################
-if (NOT DEFINED WINDMILL_NAME)
-    set(WINDMILL_NAME WINDMILL)
-endif ()
-
 if (NOT DEFINED WINDMILL_SOURCE_DIR)
     cmake_path(SET WINDMILL_SOURCE_DIR NORMALIZE "${CMAKE_CURRENT_LIST_DIR}/..")
 endif ()
@@ -22,11 +30,18 @@ if (NOT DEFINED WINDMILL_BINARY_DIR)
     set(WINDMILL_BINARY_DIR "${CMAKE_BINARY_DIR}")
 endif ()
 
-# Read version information
-file(STRINGS "${WINDMILL_SOURCE_DIR}/VERSION" WINDMILL_VERSION LIMIT_COUNT 1)
-string(REGEX REPLACE "^([0-9]+).*$" "\\1" WINDMILL_VERSION_MAJOR "${WINDMILL_VERSION}")
-string(REGEX REPLACE "^[0-9]+.([0-9]+).*$" "\\1" WINDMILL_VERSION_MINOR "${WINDMILL_VERSION}")
-string(REGEX REPLACE "^[0-9]+.[0-9]+.([0-9]+).*$" "\\1" WINDMILL_VERSION_PATCH "${WINDMILL_VERSION}")
+# Read name information from <PROJECT_ROOT>/NAME
+set(WINDMILL_PROJECT_NAME)
+file(STRINGS "${WINDMILL_SOURCE_DIR}/NAME" name LENGTH_MAXIMUM 32 LENGTH_MINIMUM 2 LIMIT_COUNT 1 REGEX "[a-zA-Z][a-zA-Z0-9]*")
+if (NOT WINDMILL_PROJECT_NAME)
+    set(WINDMILL_PROJECT_NAME WINDMILL)
+endif ()
+
+# Read version information from <PROJECT_ROOT>/VERSION
+file(STRINGS "${WINDMILL_SOURCE_DIR}/VERSION" WINDMILL_PROJECT_VERSION LIMIT_COUNT 1)
+string(REGEX REPLACE "^([0-9]+).*$" "\\1" WINDMILL_PROJECT_VERSION_MAJOR "${WINDMILL_PROJECT_VERSION}")
+string(REGEX REPLACE "^[0-9]+.([0-9]+).*$" "\\1" WINDMILL_PROJECT_VERSION_MINOR "${WINDMILL_PROJECT_VERSION}")
+string(REGEX REPLACE "^[0-9]+.[0-9]+.([0-9]+).*$" "\\1" WINDMILL_PROJECT_VERSION_PATCH "${WINDMILL_PROJECT_VERSION}")
 
 # Directory for building packages.
 set(WINDMILL_TEMPLATES_DIR "${WINDMILL_SOURCE_DIR}/cmake/templates")
@@ -167,7 +182,7 @@ mark_as_advanced(WINDMILL_STAGE_DIR)
 ########################################################################################################################
 # Report
 ########################################################################################################################
-message(STATUS "Project: ${WINDMILL_NAME} ${WINDMILL_VERSION}")
+message(STATUS "Project: ${WINDMILL_PROJECT_NAME} ${WINDMILL_PROJECT_VERSION}")
 
 site_name(WINDMILL_HOST_NAME)
 message(STATUS "Local machine name: ${WINDMILL_HOST_NAME}")
@@ -176,7 +191,7 @@ string(TIMESTAMP WINDMILL_HOST_TIME)
 message(STATUS "Local machine time: ${WINDMILL_HOST_TIME}" UTC)
 
 message(STATUS "GCC Analyzer (only for GNU compiler and C code): ${WINDMILL_ENABLE_GCC_ANALYZER}")
-message(STATUS "Clang-Tidy (only for Clang compiler): ${WINDMILL_ENABLE_CLANG_TIDY}")
+message(STATUS "Clang-Tidy: ${WINDMILL_ENABLE_CLANG_TIDY}")
 message(STATUS "Cppcheck: ${WINDMILL_ENABLE_CPPCHECK}")
 message(STATUS "Include-what-you-use: ${WINDMILL_ENABLE_IWYU}")
 
@@ -191,7 +206,7 @@ message(STATUS "Semantic interposition for binaries linked with position indepen
 # Configuration
 ########################################################################################################################
 # Ensure try_compile can find custom CMake modules in particular Platform/Zephyr. This is important for some CMake
-# functions that use try_compile indirectly such as `check_ipo_supported()`.
+# functions that use try_compile indirectly such as check_ipo_supported().
 list(APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES CMAKE_MODULE_PATH)
 
 include(Windmill/Generators)
@@ -365,12 +380,12 @@ if (NOT "${CMAKE_SYSTEM_NAME}" STREQUAL "Zephyr")
     list(APPEND CMAKE_LIBRARY_PATH /lib)
 endif ()
 list(APPEND CMAKE_PROGRAM_PATH "${WINDMILL_STAGE_DIR}/${WINDMILL_HOST_SYSTEM_TRIPLET}/bin")
+
 # Append the python executable folder in case it is from a virtual environment where we can find other host tools.
-if (EXISTS "${Python3_EXECUTABLE}")
-    cmake_path(GET Python3_EXECUTABLE PARENT_PATH path)
-    list(APPEND CMAKE_PROGRAM_PATH "${path}")
-    unset(path)
-endif ()
+cmake_path(GET Python3_EXECUTABLE PARENT_PATH path)
+list(APPEND CMAKE_PROGRAM_PATH "${path}")
+unset(path)
+
 list(APPEND CMAKE_FIND_ROOT_PATH "${WINDMILL_STAGE_DIR}/${WINDMILL_SYSTEM_TRIPLET}")
 
 # Disable warnings for external headers.
@@ -399,26 +414,30 @@ add_compile_definitions(
 #
 # For this particular project, we expand on what CMake calls FindModule-packages by using pre-compiled package archives
 # stored in the WINDMILL_PACKAGES_DIR folder. This is meant to solve:
+#
 #     1. Long build times in particular when host-only tools are involved that are not normally shipped by any of the
 #        supported host platforms (Windows, Linux and macOS);
+#
 #     2. Lack of control over dependencies including precise version tracking, known build parameters and strict link
 #        rules. We would like to have all these explicitly controlled and clearly verifiable rather than reyling on
 #        whatever might be provided by the host system, target system or toolchain's sysroot.
 #
-# Package archives are built by `Packages.<Package>` targets. Some package targets, however, can only be built for
-# the host system and will fail if the target system is not the host (i.e cross-compiling). Packages are therefore tied
-# to a target system triplet, a build script (Build<Package>.cmake) and a find script (Find<Package>.cmake)
-# both located in the WINDMILL_MODULES_DIR folder. Package archives are only decompressed in the WINDMILL_STAGE_DIR when
-# necessary. The staging function is smart enough to determine if source references in WINDMILL_PACKAGES_SOURCE_DIR have
-# changed in order to trigger a re-build.
+# Package archives are built in the configuration phase. Some packages can only be built for the host system and will
+# be skipped if the target system is not the host (i.e cross-compiling). Packages are therefore tied to a target system
+# triplet, a build script (Build<Package>.cmake) and a find script (Find<Package>.cmake) both located in the
+# WINDMILL_MODULES_DIR folder. Package archives are only decompressed in the WINDMILL_STAGE_DIR when necessary. The
+# staging function is smart enough to determine if source references in WINDMILL_PACKAGES_SOURCE_DIR have changed in
+# order to trigger a re-build.
 #
-# This is not supposed to be a general purpose depedency management system which encompasses far more complex problems
-# than the ones we are actually trying to solve. Pre-compiled packages are subject to the following limitations:
+# This is not supposed to be a general purpose depedency management system which aims to solve far more complex problems
+# than the ones we are actually trying to solve. Pre-compiled packages are thus subject to the following limitations:
 #
 #     - Packages for the host cannot be cross-compiled. For example, we cannot build a tool like include-what-you-use
 #       for Windows on a Linux host. This is due to the fact that:
+#
 #           1. A host system package is only relevant for the running host and will never produce artifacts used to
 #              build the target system unless both host and target systems are the same;
+#
 #           2. CMake can only build for a single system configuration at once so in order to build a package for the
 #              host system (e.g. tools) the target system MUST be the host system.
 #
@@ -431,9 +450,9 @@ add_compile_definitions(
 #       in the development history out-of-the-box. But if we really want to force different verions of the same
 #       dependency (submodule) for different target systems we have to somehow bypass git and automate submodule
 #       synchronization as an extra extra step and give up that clear association between git histories (ours and the
-#       dependency's). In fact, the submodule commit point stored in our history might be even be misleading because our
-#       build scripts could be forcing another point one altogether depending on the target system. Tracking all this
-#       down can get pretty confusing pretty fast and is terrible for code audits.
+#       dependency's). In that case, the submodule commit point stored in our history might even be misleading because
+#       our build scripts could be forcing another point altogether depending on the target system. Tracking all this
+#       down can become confusing very fast and is terrible for code audits.
 #
 #     - The same dependency version is used across all project modules. This is similar to the previous limitation and
 #       may sound obvious now but it can be particularly challenging if an artifact (lib or exe) has a lot of nested
@@ -464,9 +483,9 @@ add_compile_definitions(
 #       WINDMILL_PACKAGES_DIR. As a side effect, all package names must be case-insensitively unique.
 #
 # Should any of these limitations ever become a barrier we might consider using an open-source dependency manager
-# solution such as vcpkg or conan.io. Beware though that general purpose solutions as these never come without a whole
+# solution such as vcpkg or conan.io. But beware that general purpose solutions as these never come without a whole
 # set of additional restrictions, configuration requirements, side-effects, potential bugs AND limited support since
-# they only cover major desktop platforms out-of-the box. And in practice we are still left to write custom build
+# they only cover major desktop platforms out-of-the box. So in practice we are still left to write custom build
 # scripts in a way or another for dependencies.
 # See https://cmake.org/cmake/help/v3.22/manual/cmake-packages.7.html#find-module-packages
 

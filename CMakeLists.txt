@@ -231,9 +231,10 @@ set(WINDMILL_PYTHON_REQUIREMENTS_TXT "${CMAKE_CURRENT_SOURCE_DIR}/extras/require
 ########################################################################################################################
 # Project
 ########################################################################################################################
-# We are forced to declare a project here because CMake requires the root CMakeLists.txt to have one but by explicitly
-# specifying LANGUAGES NONE we can skip compiler detection altogether. Note, however, that a toolchain file, if defined
-# by CMAKE_TOOLCHAIN_FILE, will be included by this call.
+# CMake requires the root CMakeLists.txt to have a call to project(). Since we explicitly specify LANGUAGES NONE,
+# compiler detection is skipped altogether. Note, however, that a toolchain file, if defined by CMAKE_TOOLCHAIN_FILE,
+# will be included in this call. The project name is intentionally in upper-case for CMake to compose project variables
+# with the WINDMILL_ prefix (as opposed to Windmill_ or windmill_).
 project(WINDMILL LANGUAGES NONE)
 
 # Default to export compile_commands.json used by clangd, clang-tidy, cppcheck and codechecker.
@@ -334,7 +335,9 @@ endif ()
 set(WINDMILL_PYTHON_VERSION_RANGE 3.9...<3.12)
 
 # Configure python environment
-if (WINDMILL_CONFIGURE_PYTHON_ENVIRONMENT)
+if (NOT WINDMILL_CONFIGURE_PYTHON_ENVIRONMENT)
+    find_package(Python3 "${WINDMILL_PYTHON_VERSION_RANGE}" REQUIRED COMPONENTS Interpreter)
+else ()
     set(expected)
     if (DEFINED Python3_EXECUTABLE)
         set(expected "${Python3_EXECUTABLE}")
@@ -428,8 +431,6 @@ if (WINDMILL_CONFIGURE_PYTHON_ENVIRONMENT)
     endif ()
     unset(checksum)
     message(CHECK_PASS "done")
-else ()
-    find_package(Python3 "${WINDMILL_PYTHON_VERSION_RANGE}" REQUIRED COMPONENTS Interpreter)
 endif ()
 
 ########################################################################################################################
@@ -499,7 +500,8 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Generic")
         # Set environment variable to reflect the zephyr we want to use
         if (DEFINED ENV{ZEPHYR_BASE})
             if (NOT "$ENV{ZEPHYR_BASE}" STREQUAL "${ZEPHYR_BASE}")
-                message(STATUS "Overriding ZEPHYR_BASE environment variable with the zephyr location reported by west (${ZEPHYR_BASE})")
+                message(STATUS "Overriding ZEPHYR_BASE environment variable with the zephyr location reported by west"
+                        " (${ZEPHYR_BASE})")
             endif ()
         endif ()
 

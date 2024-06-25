@@ -5,7 +5,7 @@ include(Windmill/Systems/Common)
 
 # Check minimum system version.
 if (NOT "${Zephyr-Kernel_VERSION}" VERSION_GREATER_EQUAL "${CMAKE_SYSTEM_VERSION}")
-    message(FATAL_ERROR "Could NOT find a suitable ${WINDMILL_NAME} project"
+    message(FATAL_ERROR "Could NOT find a suitable Zephyr kernel project"
             " (found version \"${Zephyr-Kernel_VERSION}\", but minimum required is \"${CMAKE_SYSTEM_VERSION}\")")
 endif ()
 
